@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'login.dart';
+
 class Home extends StatefulWidget {
   const  Home({Key? key}) : super(key: key);
 
@@ -21,17 +23,24 @@ class _HomeState extends State<Home> {
                width: 200,
              )
            ),
-          Column(children: [
-            ElevatedButton(
-              onPressed: (){},
+          Padding(
+            padding: const EdgeInsets.only(top: 550, left: 45),
+            child: ElevatedButton(
+              onPressed: (){
+                Navigator.push(
+                  context, MaterialPageRoute(
+                    builder: (context) => Login()
+                  )
+                );
+              },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(
-                  const Color.fromARGB(255, 255, 255, 255)),
+                  const Color.fromARGB(255, 101, 187, 88)),
                   shape: MaterialStateProperty.all(RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(14))),
                     minimumSize: MaterialStateProperty.all(const Size(75,40)),
                     padding: MaterialStateProperty.all(
-                      const EdgeInsets.symmetric(vertical: 12.5, horizontal: 40.0)
+                      const EdgeInsets.symmetric(vertical: 10.0, horizontal: 40.0)
                     )
               ), 
               child: const Text("Já tem uma conta? Entre!", style: TextStyle(
@@ -39,8 +48,29 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                 )
-              ],
-            )
+              
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 610, left: 5),
+              child: ElevatedButton(
+                onPressed: (){},
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 255, 255, 255)),
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
+                  minimumSize: MaterialStateProperty.all(const Size(75,40)),
+                  padding: MaterialStateProperty.all(const EdgeInsets.symmetric(vertical: 12.5, horizontal: 40.0)),
+                ),
+                child: GestureDetector(
+                  child: const Text(
+                    "Primeira vez no Universo Prematuro?",
+                    style: TextStyle(color: Color.fromARGB(255, 101, 187, 88), fontSize: 15),
+                    )
+                )
+
+
+              ),
+              
+              )
           ]
         ),
       )

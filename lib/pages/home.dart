@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'login.dart';
+import 'register.dart';
 
 class Home extends StatefulWidget {
   const  Home({Key? key}) : super(key: key);
@@ -53,7 +54,11 @@ class _HomeState extends State<Home> {
             Padding(
               padding: const EdgeInsets.only(top: 610, left: 5),
               child: ElevatedButton(
-                onPressed: (){},
+                onPressed: (){
+                  Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Register())
+                  );
+                },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 255, 255, 255)),
                   shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),

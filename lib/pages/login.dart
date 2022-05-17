@@ -45,9 +45,13 @@ class _LoginState extends State<Login> {
                           keyboardType: TextInputType.emailAddress,
                           style: const TextStyle(fontSize: 20),
                           decoration: const InputDecoration(
-                            iconColor: Color.fromARGB(255, 101, 187, 88),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.green
+                              )
+                            ),
                             hintText: "E-mail",
-                            prefixIcon: Icon(Icons.account_circle_outlined)),
+                            prefixIcon: Icon(Icons.account_circle_outlined, color: Colors.green,)),
                         ),
                         const SizedBox(height: 20.0),
                         TextField(
@@ -69,7 +73,9 @@ class _LoginState extends State<Login> {
                         Padding(
                           padding: const EdgeInsets.only(top: 16, bottom: 10),
                           child: ElevatedButton(
-                            onPressed: (){},
+                            onPressed: (){
+                              Navigator.pushReplacementNamed(context, "/profile");
+                            },
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(
                                 const Color.fromARGB(255, 101, 187, 88)),

@@ -154,14 +154,14 @@ class _RegisterState extends State<Register> {
                         
                       },
                       style: TextButton.styleFrom(
-                          padding: const EdgeInsets.fromLTRB(24, 14, 24, 14),
+                          padding: const EdgeInsets.fromLTRB(22, 12, 22, 12),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(22)),
                           backgroundColor:
                               const Color.fromARGB(255, 101, 187, 88)),
                       child: const Text(
                         "Cadastrar",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                        style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
                       ),
                     )
                   ),

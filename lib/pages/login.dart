@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
-  Login({Key? key}) : super(key: key);
+  const Login({Key? key}) : super(key: key);
 
   @override
   State<Login> createState() => _LoginState();
@@ -56,17 +56,34 @@ class _LoginState extends State<Login> {
                           obscureText: true,
                           style: const TextStyle(fontSize: 20),
                           decoration: InputDecoration(
+                            focusedBorder: const UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.green
+                              )
+                            ),
                             alignLabelWithHint: mounted,
                             hintText: "Senha",
-                            prefixIcon: const Icon(Icons.password_rounded)),
+                            prefixIcon: const Icon(Icons.password_rounded, color: Colors.green,), 
+                            ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 16, bottom: 10),
                           child: ElevatedButton(
                             onPressed: (){},
-                            child: const Text("Cadastrar!", style: TextStyle(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                const Color.fromARGB(255, 101, 187, 88)),
+                                shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14))),
+                                  minimumSize: MaterialStateProperty.all(const Size(75,40)),
+                                  padding: MaterialStateProperty.all(
+                                    const EdgeInsets.symmetric(vertical: 10.0, horizontal: 40.0)
+                                  )
+                                ),
+                            child: const Text("Entre agora!", style: TextStyle(
                               color: Colors.white, fontSize: 15
-                            ),),
+                              ),
+                            ),
                           ),
                         )
                       ],

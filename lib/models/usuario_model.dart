@@ -3,7 +3,7 @@ class Usuario{
   String? _passw;
 
 
-  Usuario(this._email, this._passw);
+  Usuario();
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = {"email:": email};

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'login.dart';
-import 'register.dart';
 
 class Home extends StatefulWidget {
   const  Home({Key? key}) : super(key: key);
@@ -20,19 +18,15 @@ class _HomeState extends State<Home> {
         child: Stack(children: <Widget>[
            Center(
              child: Image.asset(
-               "images/logo/LogoPrinc.png",
-               width: 200,
+               "images/logo/LogoMov.gif",
+               width: 300,
              )
            ),
           Padding(
-            padding: const EdgeInsets.only(top: 550, left: 45),
+            padding: const EdgeInsets.only(top: 550, left: 50),
             child: ElevatedButton(
               onPressed: (){
-                Navigator.push(
-                  context, MaterialPageRoute(
-                    builder: (context) => Login()
-                  )
-                );
+                Navigator.pushReplacementNamed(context, "/login");
               },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(
@@ -52,12 +46,10 @@ class _HomeState extends State<Home> {
               
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 610, left: 5),
+              padding: const EdgeInsets.only(top: 610, left: 8),
               child: ElevatedButton(
                 onPressed: (){
-                  Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Register())
-                  );
+                  Navigator.pushReplacementNamed(context, "/register");
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 255, 255, 255)),

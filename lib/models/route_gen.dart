@@ -3,6 +3,7 @@ import 'package:universoprematurov8/pages/home.dart';
 import 'package:universoprematurov8/pages/register.dart';
 
 import '../pages/login.dart';
+import '../pages/profile.dart';
 
 class RouteGenerator {
 
@@ -17,11 +18,15 @@ class RouteGenerator {
           );
       case "/login" :
         return MaterialPageRoute(
-          builder: (_) => Login()
+          builder: (_) => const Login()
           );
       case "/register" :
         return MaterialPageRoute(
           builder: (_) => const Register()
+          );
+      case "/profile" :
+        return MaterialPageRoute(
+          builder: (_) => const Profile()
           );
       default:
       _erroRota();

@@ -110,6 +110,7 @@ class _RegisterState extends State<Register> {
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 255, 193, 143),
         elevation: 0,
+        actions: [Image.asset('images/logo/LogoTop.png', width: 45, height: 20)],
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: (){
@@ -186,7 +187,7 @@ class _RegisterState extends State<Register> {
                           _cadastrarUsuario(Usuario());
                           _logarUsuario(Usuario());
                         }
-                          Navigator.pushReplacementNamed(context, "/profile");
+                          Navigator.pushReplacementNamed(context, "/editprofile");
                         
                       },
                       style: TextButton.styleFrom(

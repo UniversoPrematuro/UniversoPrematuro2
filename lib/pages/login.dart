@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../models/usuario_model.dart';
+import 'home.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -89,6 +90,22 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Login"), 
+        centerTitle: true,
+        backgroundColor: const Color.fromARGB(255, 255, 193, 143),
+        elevation: 0,
+        actions: [Image.asset('images/logo/LogoTop.png', width: 45, height: 20)],
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new),
+          onPressed: (){
+             Navigator.pushReplacement(
+               context, MaterialPageRoute(builder: (context) => const Home())
+               
+               );
+          },
+        ),
+      ),
       body: Container(
         decoration: const BoxDecoration(
           color: Color.fromARGB(255, 255, 193, 143)),

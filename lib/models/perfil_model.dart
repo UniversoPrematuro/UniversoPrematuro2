@@ -8,7 +8,7 @@ class Perfil extends Usuario{
   String? _nome;
   String? _nomeMae;
   String? _birth;
-  bool? _gage;
+  int? _gage;
   bool? _gender;
 
   Perfil();
@@ -44,16 +44,16 @@ class Perfil extends Usuario{
     _birth = value;
   }
 
-  bool get gage => _gage!;
+  int get gage => _gage!;
 
-  set gage(bool value){
-    _gage = value;
+  set gage(int value){
+    _gage = (value / 7) as int?;
   }
 
   bool get gender => _gender!;
 
   set gender(bool value){
-    _gage = value;
+    _gender = value;
   }
   
 

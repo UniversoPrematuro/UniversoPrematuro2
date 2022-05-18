@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:universoprematurov8/pages/home.dart';
 import 'package:universoprematurov8/pages/register.dart';
 
+import '../pages/edit_profile.dart';
 import '../pages/login.dart';
 import '../pages/profile.dart';
 
@@ -27,6 +28,10 @@ class RouteGenerator {
       case "/profile" :
         return MaterialPageRoute(
           builder: (_) => const Profile()
+          );
+      case "/editprofile" :
+        return MaterialPageRoute(
+          builder: (_) => EditProfile()
           );
       default:
       _erroRota();

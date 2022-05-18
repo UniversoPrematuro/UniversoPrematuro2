@@ -1,10 +1,12 @@
 // ignore_for_file: avoid_print
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../models/usuario_model.dart';
 import 'edit_profile.dart';
+import 'home.dart';
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
@@ -19,6 +21,24 @@ class _RegisterState extends State<Register> {
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassw = TextEditingController();
   String _errorMessage = "";
+
+  _logarUsuario(Usuario usuario){
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    auth.signInWithEmailAndPassword(email: usuario.email, password: usuario.passw)
+    .then((firebaseUser){
+
+      Navigator.pushReplacementNamed(context, "/profile");
+
+    }).catchError((error){
+      setState(() {
+        _errorMessage = "Erro ao autenticar o usuario, verifique email e senha";
+      });
+    }
+    
+    );
+
+  }
 
   _validarCampos(){
     String email = _controllerEmail.text;
@@ -56,7 +76,10 @@ class _RegisterState extends State<Register> {
     auth.createUserWithEmailAndPassword(
       email: usuario.email, password: usuario.passw
       ).then((firebaseUser){
-        
+        FirebaseFirestore db = FirebaseFirestore.instance;
+
+        db.collection("users").doc(firebaseUser.user?.uid).set(usuario.toMap());
+
         setState(() {
           _errorMessage = "Usuário cadastrado com sucesso!";
         });
@@ -74,13 +97,28 @@ class _RegisterState extends State<Register> {
 
 
 
+  
+    
+  
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Cadastro"),
+        centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 255, 193, 143),
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new),
+          onPressed: (){
+             Navigator.pushReplacement(
+               context, MaterialPageRoute(builder: (context) => const Home())
+               
+               );
+          },
+        ),
       ),
 
       body: Container(
@@ -146,11 +184,9 @@ class _RegisterState extends State<Register> {
                       onPressed: () {
                         if(_validarCampos() == true){
                           _cadastrarUsuario(Usuario());
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => EditProfile()));
+                          _logarUsuario(Usuario());
                         }
+                          Navigator.pushReplacementNamed(context, "/profile");
                         
                       },
                       style: TextButton.styleFrom(

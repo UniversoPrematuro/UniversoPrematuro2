@@ -1,4 +1,9 @@
+// ignore_for_file: use_build_context_synchronously, await_only_futures, unnecessary_null_comparison
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../models/usuario_model.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -11,6 +16,73 @@ class _LoginState extends State<Login> {
 
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassw = TextEditingController();
+  var _errorMessage = "";
+
+
+  _validarCampos(){
+    String email = _controllerEmail.text;
+    String passw = _controllerPassw.text;
+
+    if(email.isNotEmpty && email.contains("@")){
+      if(passw.isNotEmpty && passw.length >= 5){
+        setState(() {
+          _errorMessage = "";
+        });
+
+        Usuario usuario = Usuario();
+        usuario.email = email;
+        usuario.passw = passw;
+        _logarUsuario( usuario );
+
+      } else{
+        setState(() {
+          _errorMessage = "Preencha a senha corretamente";
+        });
+      }
+
+    } else {
+      setState(() {
+        _errorMessage = "Preencha o email";
+      });
+    }
+  }
+
+
+
+  _logarUsuario(Usuario usuario){
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    auth.signInWithEmailAndPassword(email: usuario.email, password: usuario.passw)
+    .then((firebaseUser){
+
+      Navigator.pushReplacementNamed(context, "/profile");
+
+    }).catchError((error){
+      setState(() {
+        _errorMessage = "Erro ao autenticar o usuario, verifique email e senha";
+      });
+    }
+    
+    );
+
+  }
+
+  Future _verificaLogado() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    auth.signOut();
+
+    User usuarioLogado = await auth.currentUser!;
+    if(usuarioLogado != null){
+      Navigator.pushReplacementNamed(context, "/profile");
+    }
+
+  }
+
+  @override
+  void initState() {
+    _verificaLogado();
+    super.initState();
+  }
 
 
 
@@ -70,11 +142,15 @@ class _LoginState extends State<Login> {
                             prefixIcon: const Icon(Icons.password_rounded, color: Colors.green,), 
                             ),
                         ),
+                        const SizedBox(height: 20.0),
                         Padding(
                           padding: const EdgeInsets.only(top: 16, bottom: 10),
                           child: ElevatedButton(
                             onPressed: (){
-                              Navigator.pushReplacementNamed(context, "/profile");
+                              if(_validarCampos() == true){
+                                _logarUsuario(Usuario());
+                                Navigator.pushReplacementNamed(context, "/profile");
+                              }
                             },
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(
@@ -88,6 +164,20 @@ class _LoginState extends State<Login> {
                                 ),
                             child: const Text("Entre agora!", style: TextStyle(
                               color: Colors.white, fontSize: 15
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 15),
+                          child: Center(
+                            child: Text(
+                              _errorMessage, 
+                              style: const 
+                              TextStyle(
+                                color: Color.fromARGB(255, 255, 0, 0),
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500
                               ),
                             ),
                           ),

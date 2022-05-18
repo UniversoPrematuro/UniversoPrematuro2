@@ -65,6 +65,7 @@ flutter:
   - images/logo/LogoPrinc.png
   - images/logo/logologin.png
   - images/logo/LogoMov.gif
+  - images/logo/LogoTop.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -1,7 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import '../models/perfil_model.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class EditProfile extends StatefulWidget {
-  EditProfile({Key? key}) : super(key: key);
+ const EditProfile({Key? key}) : super(key: key);
 
   @override
   State<EditProfile> createState() => _EditProfileState();
@@ -14,8 +20,80 @@ class _EditProfileState extends State<EditProfile> {
   final TextEditingController _controllerBirth = TextEditingController();
   final TextEditingController _controllerGage = TextEditingController();
   final TextEditingController _controllerGender = TextEditingController();
+  XFile? _imagem;
+  String? _idUserLogado;
+  bool? _uploadingImagem = false;
+  String? _urlRecuperada;
+  String? _status;
+
+   _recuperarImagem(bool daCamera) async {
+    ImagePicker _picker = ImagePicker();
+    XFile? imagemSelec;
+    if( daCamera ) {
+      imagemSelec = (await _picker.pickImage(source: ImageSource.camera));
+    } else {
+      imagemSelec = (await _picker.pickImage(source: ImageSource.gallery));
+    }
+    setState(() {
+      _imagem = imagemSelec;
+      if( _imagem != null ){
+        _uploadingImagem = true;
+        _status = "Em progresso";
+        _uploadImagem();
+      }
+    });
+
+  }
+  Future _uploadImagem() async {
+    FirebaseStorage storage = FirebaseStorage.instance;
+    File file = File( _imagem!.path );
+    Reference pastaRaiz = storage.ref();
+    Reference arquivo = pastaRaiz.child("perfil").child("${_idUserLogado!}.jpg");
+
+    UploadTask task = arquivo.putFile(file);
+    //controlar progresso do upload
+    task.snapshotEvents.listen((TaskSnapshot taskSnapshot) {
+      if(taskSnapshot.state == TaskState.running ){
+        setState(() {
+          _uploadingImagem = true;
+          _status = "Em progresso";
+        });
+      } else if (taskSnapshot.state == TaskState.success){
+        _recuperarUrlImg( taskSnapshot );
+        setState(() {
+          _uploadingImagem = false;
+          _status = "Upload com sucesso";
+        });
+      }
+      
+    });
+
+    //recuperar url da imagem
+  }
+
+
+  _recuperarUrlImg(TaskSnapshot taskSnapshot) async {
+    String url =  await taskSnapshot.ref.getDownloadURL();
+    print("resultado url: {$url}");
+
+    setState(() {
+      _urlRecuperada = url as Null;
+    });
+  }
   
-  
+  _recuperarDados() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User usuarioLogado = auth.currentUser!;
+    _idUserLogado = usuarioLogado.uid;
+
+
+  }
+
+  @override
+  void initState() {
+    _recuperarDados();
+    super.initState();
+  }
 
 
   @override
@@ -24,7 +102,7 @@ class _EditProfileState extends State<EditProfile> {
       appBar: AppBar(
         title: const Text("Editar Perfil"),
         centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 255, 193, 143),
+        backgroundColor: Colors.green,
         elevation: 0,
         actions: [Image.asset('images/logo/LogoTop.png', width: 45, height: 20)],
         // leading: IconButton(
@@ -38,27 +116,37 @@ class _EditProfileState extends State<EditProfile> {
         // ),
       ),
       body: Container(
-        decoration:
-          const BoxDecoration(color: Color.fromARGB(255, 255, 193, 143)),
         padding: const EdgeInsets.all(16),
         child: Center(
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                const CircleAvatar(
+                _uploadingImagem!
+                ? const CircularProgressIndicator()
+                : Container(),
+                CircleAvatar(
                      radius: 100,
-                     backgroundImage: null,
+                     backgroundColor: Colors.grey,
+                     backgroundImage: 
+                      _urlRecuperada != null
+                        ? NetworkImage(_urlRecuperada!)
+                        : null
+                      
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     TextButton(
-                      child: const Text("Câmera"),
-                      onPressed: () {},
+                      child: const Text("Câmera", style: TextStyle(color: Colors.green)),
+                      onPressed: () {
+                        _recuperarImagem(true);
+                      },
                     ),
                     TextButton(
-                      child: const Text("Galeria"),
-                      onPressed: () {},
+                      child: const Text("Galeria", style: TextStyle(color: Colors.green)),
+                      onPressed: () {
+                        _recuperarImagem(false);
+                      },
                     ),
                   ],
                 ),
@@ -74,11 +162,11 @@ class _EditProfileState extends State<EditProfile> {
                           decoration: const InputDecoration(
                             focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
-                              color: Colors.white
+                              color: Colors.green
                             )
                           ),
                             hintText: "Nome",
-                            labelText: "Nome",
+                            labelText: "Nome", labelStyle: TextStyle(color: Colors.green),
                             prefixIcon: Icon(Icons.person_add_alt_outlined, color: Colors.green,)),
                         ),
                 ),
@@ -95,11 +183,11 @@ class _EditProfileState extends State<EditProfile> {
                           decoration: const InputDecoration(
                             focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
-                              color: Colors.white
+                              color: Colors.green
                             )
                           ),
                             hintText: "Nome da mãe",
-                            labelText: "Nome da mãe",
+                            labelText: "Nome da mãe", labelStyle: TextStyle(color: Colors.green),
                             prefixIcon: Icon(Icons.person_add_alt_outlined, color: Colors.green,)),
                         ),
                 ),
@@ -116,11 +204,11 @@ class _EditProfileState extends State<EditProfile> {
                           decoration: const InputDecoration(
                             focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
-                              color: Colors.white
+                              color: Colors.green
                             )
                           ),
                               hintText: 'DD/MM/AAAA',
-                              labelText: 'Data de Nascimento',
+                              labelText: 'Data de Nascimento',labelStyle: TextStyle(color: Colors.green),
                             prefixIcon: Icon(Icons.calendar_month_outlined, color: Colors.green,)),
                         ),
                 ),
@@ -137,11 +225,11 @@ class _EditProfileState extends State<EditProfile> {
                           decoration: const InputDecoration(
                             focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
-                              color: Colors.white
+                              color: Colors.green
                             )
                           ),
                             hintText: 'Semanas: SS e Dias: D',
-                            labelText: 'Idade Gestacional',
+                            labelText: 'Idade Gestacional',labelStyle: TextStyle(color: Colors.green),
                             prefixIcon: Icon(Icons.calendar_month_outlined, color: Colors.green,)),
                         ),
                 ),
@@ -158,11 +246,11 @@ class _EditProfileState extends State<EditProfile> {
                           decoration: const InputDecoration(
                             focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
-                              color: Colors.white
+                              color: Colors.green
                             )
                           ),
                             hintText: "Sexo",
-                            labelText: "Sexo",
+                            labelText: "Sexo", labelStyle: TextStyle(color: Colors.green),
                             prefixIcon: Icon(Icons.person_add_alt_1_outlined, color: Colors.green,)),
                         ),
                 ),

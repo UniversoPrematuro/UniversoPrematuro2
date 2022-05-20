@@ -10,7 +10,6 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  FirebaseFirestore.instance.collection("users").doc().set({});
 
   runApp(MaterialApp(
     home: const Home(),

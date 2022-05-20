@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 import 'usuario_model.dart';
 
 class Perfil extends Usuario{
@@ -19,7 +17,7 @@ class Perfil extends Usuario{
     Map<String, dynamic> map = {
     "nome" : nome,
     "nome da mae" : nomeMae,
-    "data nasc." : birth,
+    "data de nasc." : birth,
     "idade" : gage,
     "sexo" : gender
     };

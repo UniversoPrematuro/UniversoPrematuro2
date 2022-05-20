@@ -1,4 +1,6 @@
 
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +28,7 @@ class _EditProfileState extends State<EditProfile> {
   String? _idUsuarioLogado;
   bool _subindoImagem = false;
   String _urlImagemRecuperada = "";
+  String mensagem = "";
  
   Future _recuperarImagem(String origemImagem) async {
     final ImagePicker _picker = ImagePicker();
@@ -56,7 +59,7 @@ class _EditProfileState extends State<EditProfile> {
     File file = File(_imagem!.path);
     Reference pastaRaiz = await storage.ref();
     Reference arquivo =
-        await pastaRaiz.child("perfil").child("${_idUsuarioLogado!}.jpg");
+    await pastaRaiz.child("perfil").child("${_idUsuarioLogado!}.jpg");
  
     UploadTask task = arquivo.putFile(file);
  
@@ -81,16 +84,100 @@ class _EditProfileState extends State<EditProfile> {
       _urlImagemRecuperada = url;
     });
   }
-   _recuperarDados() {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    User usuarioLogado = auth.currentUser!;
-    _idUsuarioLogado = usuarioLogado.uid;
+  
+  
+  _atualizarNomeFirestore(){
+
+    String nome = _controllerNome.text;
+    FirebaseFirestore db = FirebaseFirestore.instance;
+
+    Map<String, dynamic> dadosAtualizar = {
+      "nome" : nome
+    };
+
+    db.collection("users")
+        .doc(_idUsuarioLogado)
+        .update( dadosAtualizar );
+
   }
+
+  _atualizarUrlImagemFirestore(String url){
+
+    FirebaseFirestore db = FirebaseFirestore.instance;
+
+    Map<String, dynamic> dadosAtualizar = {
+      "urlImagem" : url
+    };
+    
+    db.collection("users")
+    .doc(_idUsuarioLogado)
+    .update( dadosAtualizar );
+
+  }
+
+  _recuperarDadosUsuario() async {
+
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User usuarioLogado = await auth.currentUser!;
+    _idUsuarioLogado = usuarioLogado.uid;
+
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    DocumentSnapshot snapshot = await db.collection("users")
+      .doc( _idUsuarioLogado )
+      .get();
+
+    Map<String, dynamic>? dados = snapshot.data() as Map<String, dynamic>?;
+    _controllerNome.text = dados!["nome"];
+
+    if( dados["urlImagem"] != null ){
+      _urlImagemRecuperada = dados["urlImagem"];
+    }
+
+  }
+  
+  
+  //  _recuperarDados() {
+  //   FirebaseAuth auth = FirebaseAuth.instance;
+  //   User usuarioLogado = auth.currentUser!;
+  //   _idUsuarioLogado = usuarioLogado.uid;
+
+
+  // }
+
+  // _validarPerfil(){
+  //   FirebaseAuth auth = FirebaseAuth.instance;
+
+  //   String nome = _controllerNome.text;
+  //   String nomeMae = _controllerNomeMae.text;
+  //   String birth = _controllerBirth.text;
+  //   String gage = _controllerGage.text;
+  //   String gender = _controllerGender.text;
+
+  //   if(nome.isNotEmpty && nomeMae.isNotEmpty && birth.isNotEmpty && gage.isNotEmpty && gender.isNotEmpty){
+  //     setState(() {
+  //       mensagem = 'jacare';
+  //     });
+  //     Perfil perfil = Perfil();
+  //     perfil.nome = nome;
+  //     perfil.nomeMae = nomeMae;
+  //     perfil.birth = birth;
+  //     perfil.gage = gage as int;
+  //     perfil.gender = gender as bool;
+  //   } else {
+  //     _saveData(Perfil());
+  //   }
+  // }
+  // _saveData(Perfil perfil){
+  //   FirebaseFirestore db = FirebaseFirestore.instance;
+
+  //   db.collection("users").doc().set(perfil.toMap());
+  // }
+
 
   @override
   void initState() {
     super.initState();
-    _recuperarDados();
+    _recuperarDadosUsuario();
   }
 
   @override
@@ -102,15 +189,6 @@ class _EditProfileState extends State<EditProfile> {
         backgroundColor: const Color.fromARGB(255, 255, 193, 143),
         elevation: 0,
         actions: [Image.asset('images/logo/LogoTop.png', width: 45, height: 20)],
-        // leading: IconButton(
-        //   icon: const Icon(Icons.arrow_back_ios_new),
-        //   onPressed: (){
-        //      Navigator.pushReplacement(
-        //        context, MaterialPageRoute(builder: (context) => const Home())
-               
-        //        );
-        //   },
-        // ),
       ),
       body: Container(
         decoration:
@@ -257,7 +335,10 @@ class _EditProfileState extends State<EditProfile> {
                   Padding(
                     padding: const EdgeInsets.only(top: 25),
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        _atualizarNomeFirestore();
+                        _atualizarUrlImagemFirestore(_urlImagemRecuperada);
+                      },
                       style: TextButton.styleFrom(
                           padding: const EdgeInsets.fromLTRB(22, 12, 22, 12),
                           shape: RoundedRectangleBorder(

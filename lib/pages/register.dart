@@ -3,9 +3,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../models/perfil_model.dart';
 
 import '../models/usuario_model.dart';
-import 'edit_profile.dart';
 import 'home.dart';
 
 class Register extends StatefulWidget {

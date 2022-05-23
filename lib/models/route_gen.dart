@@ -31,7 +31,7 @@ class RouteGenerator {
           );
       case "/editprofile" :
         return MaterialPageRoute(
-          builder: (_) => EditProfile()
+          builder: (_) => const EditProfile()
           );
       default:
       _erroRota();

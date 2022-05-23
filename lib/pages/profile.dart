@@ -1,8 +1,12 @@
+// ignore_for_file: unused_field
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:universoprematurov8/pages/login.dart';
+import '../pages/edit_profile.dart';
 
-import 'home.dart';
+// import 'home.dart';
 
 
 class Profile extends StatefulWidget {
@@ -12,14 +16,18 @@ class Profile extends StatefulWidget {
   State<Profile> createState() => _ProfileState();
 }
 
-class _ProfileState extends State<Profile> {
+class _ProfileState extends State<Profile>{
 
   String _emailUser = "";
+
+  
+  
+
 
 
  Future  _recuperarEmail() async {
     FirebaseAuth auth = FirebaseAuth.instance;
-    User usuarioLogado = await auth.currentUser!;
+    User usuarioLogado = auth.currentUser!;
 
     setState(() {
       _emailUser = usuarioLogado.email!;
@@ -74,7 +82,7 @@ class _ProfileState extends State<Profile> {
                       const CircleAvatar(
                         radius: 75,
                         backgroundColor: Colors.black,
-                      )
+                      ),
                   ],
                 ),
               ),

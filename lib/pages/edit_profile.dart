@@ -1,4 +1,3 @@
-
 // ignore_for_file: unnecessary_null_comparison
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,7 +9,7 @@ import '../models/perfil_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class EditProfile extends StatefulWidget {
-  EditProfile({Key? key}) : super(key: key);
+  const EditProfile({Key? key}) : super(key: key);
 
   @override
   State<EditProfile> createState() => _EditProfileState();
@@ -23,6 +22,17 @@ class _EditProfileState extends State<EditProfile> {
   final TextEditingController _controllerBirth = TextEditingController();
   final TextEditingController _controllerGage = TextEditingController();
   final TextEditingController _controllerGender = TextEditingController();
+  String _emailUser = "";
+
+
+ Future  _recuperarEmail() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User usuarioLogado = auth.currentUser!;
+
+    setState(() {
+      _emailUser = usuarioLogado.email!;
+    });
+  }
   FirebaseStorage storage = FirebaseStorage.instance;
   XFile? _imagem;
   String? _idUsuarioLogado;
@@ -101,6 +111,31 @@ class _EditProfileState extends State<EditProfile> {
 
   }
 
+  saveData()async{
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User usuarioLogado = auth.currentUser!;
+    _idUsuarioLogado = usuarioLogado.uid;
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    String email = _emailUser;
+    String nome = _controllerNome.text;
+    String nomeMae = _controllerNomeMae.text;
+    String birth = _controllerBirth.text;
+    String gender = _controllerGender.text;
+    String gage = _controllerGage.text;
+    // _recuperarDadosUsuario();
+
+    Map<String, dynamic> data = {
+      "nome" : nome,
+      "mae" : nomeMae,
+      "nascimento" : birth,
+      "genero" : gender,
+      "gage" : gage
+    };
+    db.collection("users").doc(_idUsuarioLogado).update(data);
+    
+    
+  }
+
   _atualizarUrlImagemFirestore(String url){
 
     FirebaseFirestore db = FirebaseFirestore.instance;
@@ -177,7 +212,6 @@ class _EditProfileState extends State<EditProfile> {
   @override
   void initState() {
     super.initState();
-    _recuperarDadosUsuario();
   }
 
   @override
@@ -336,8 +370,10 @@ class _EditProfileState extends State<EditProfile> {
                     padding: const EdgeInsets.only(top: 25),
                     child: ElevatedButton(
                       onPressed: () {
-                        _atualizarNomeFirestore();
+                        saveData();
+                        // _atualizarNomeFirestore();
                         _atualizarUrlImagemFirestore(_urlImagemRecuperada);
+                        Navigator.pushReplacementNamed(context, "/profile");
                       },
                       style: TextButton.styleFrom(
                           padding: const EdgeInsets.fromLTRB(22, 12, 22, 12),

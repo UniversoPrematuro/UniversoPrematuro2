@@ -1,6 +1,11 @@
 class Usuario{
   String? _email;
   String? _passw;
+  // String? _nome;
+  // String? _nomeMae;
+  // String? _birth;
+  // int? _gage;
+  // bool? _gender;
 
 
   Usuario();

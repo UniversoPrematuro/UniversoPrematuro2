@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import '../models/perfil_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({Key? key}) : super(key: key);
@@ -22,6 +23,17 @@ class _EditProfileState extends State<EditProfile> {
   final TextEditingController _controllerBirth = TextEditingController();
   final TextEditingController _controllerGage = TextEditingController();
   final TextEditingController _controllerGender = TextEditingController();
+  var maskDate = MaskTextInputFormatter(
+  mask: '##/##/####', 
+  filter: { "#": RegExp(r'[0-9]') },
+  type: MaskAutoCompletionType.lazy
+  );
+  var maskGage = MaskTextInputFormatter(
+  mask: 'Semanas: ##, Dias: ##', 
+  filter: { "#": RegExp(r'[0-9]') },
+  type: MaskAutoCompletionType.lazy
+);
+
   String _emailUser = "";
 
 
@@ -89,52 +101,68 @@ class _EditProfileState extends State<EditProfile> {
   }
  
   Future _recuperarURLimagem(TaskSnapshot taskSnapshot) async {
-    String url = await taskSnapshot.ref.getDownloadURL();
+    String url =  await taskSnapshot.ref.getDownloadURL();
     setState(() {
       _urlImagemRecuperada = url;
     });
   }
   
   
-  _atualizarNomeFirestore(){
+   _atualizarNomeFirestore(){
 
-    String nome = _controllerNome.text;
-    FirebaseFirestore db = FirebaseFirestore.instance;
+     String nome = _controllerNome.text;
+     
+     FirebaseFirestore db = FirebaseFirestore.instance;
 
-    Map<String, dynamic> dadosAtualizar = {
-      "nome" : nome
-    };
+     Map<String, dynamic> dadosAtualizar = {
+       "nome" : nome,
+     };
 
-    db.collection("users")
-        .doc(_idUsuarioLogado)
-        .update( dadosAtualizar );
+     db.collection("users")
+         .doc(_idUsuarioLogado)
+         .update( dadosAtualizar );
 
-  }
+   }
 
   saveData()async{
     FirebaseAuth auth = FirebaseAuth.instance;
     User usuarioLogado = auth.currentUser!;
     _idUsuarioLogado = usuarioLogado.uid;
+    
     FirebaseFirestore db = FirebaseFirestore.instance;
     String email = _emailUser;
     String nome = _controllerNome.text;
     String nomeMae = _controllerNomeMae.text;
     String birth = _controllerBirth.text;
     String gender = _controllerGender.text;
-    String gage = _controllerGage.text;
-    // _recuperarDadosUsuario();
+     String gage = _controllerGage.text;
 
-    Map<String, dynamic> data = {
+
+    Map<String,dynamic> data = {
       "nome" : nome,
       "mae" : nomeMae,
       "nascimento" : birth,
       "genero" : gender,
-      "gage" : gage
+       "gage" : gage,
     };
     db.collection("users").doc(_idUsuarioLogado).update(data);
     
-    
   }
+
+  _recuperaGage(){
+    num gage = int.parse(_controllerGage.text.substring(9,11))*7 +
+              int.parse(_controllerGage.text.substring(20,21));
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    Map<String, num> gAge = {
+      "gage" : gage
+    };
+    db.collection("users").doc(_idUsuarioLogado).update(gAge);
+  }
+
+  //  Future idadeReal(gage)async{
+  //    int gage = int.parse(_controllerGage.text.substring(9,11))*7 +
+  //              int.parse(_controllerGage.text.substring(20,21));
+  //  }
 
   _atualizarUrlImagemFirestore(String url){
 
@@ -171,47 +199,13 @@ class _EditProfileState extends State<EditProfile> {
   }
   
   
-  //  _recuperarDados() {
-  //   FirebaseAuth auth = FirebaseAuth.instance;
-  //   User usuarioLogado = auth.currentUser!;
-  //   _idUsuarioLogado = usuarioLogado.uid;
-
-
-  // }
-
-  // _validarPerfil(){
-  //   FirebaseAuth auth = FirebaseAuth.instance;
-
-  //   String nome = _controllerNome.text;
-  //   String nomeMae = _controllerNomeMae.text;
-  //   String birth = _controllerBirth.text;
-  //   String gage = _controllerGage.text;
-  //   String gender = _controllerGender.text;
-
-  //   if(nome.isNotEmpty && nomeMae.isNotEmpty && birth.isNotEmpty && gage.isNotEmpty && gender.isNotEmpty){
-  //     setState(() {
-  //       mensagem = 'jacare';
-  //     });
-  //     Perfil perfil = Perfil();
-  //     perfil.nome = nome;
-  //     perfil.nomeMae = nomeMae;
-  //     perfil.birth = birth;
-  //     perfil.gage = gage as int;
-  //     perfil.gender = gender as bool;
-  //   } else {
-  //     _saveData(Perfil());
-  //   }
-  // }
-  // _saveData(Perfil perfil){
-  //   FirebaseFirestore db = FirebaseFirestore.instance;
-
-  //   db.collection("users").doc().set(perfil.toMap());
-  // }
+ 
 
 
   @override
   void initState() {
     super.initState();
+    saveData();
   }
 
   @override
@@ -306,6 +300,7 @@ class _EditProfileState extends State<EditProfile> {
                 Padding(
                   padding: const EdgeInsets.only(top: 25),
                   child: TextField(
+                          inputFormatters: [maskDate],
                           controller: _controllerBirth,
                           autofocus: true,
                           keyboardType: TextInputType.datetime,
@@ -328,6 +323,7 @@ class _EditProfileState extends State<EditProfile> {
                   padding: const EdgeInsets.only(top: 25),
                   child: TextField(
                           controller: _controllerGage,
+                          inputFormatters: [maskGage],
                           autofocus: true,
                           keyboardType: TextInputType.number,
                           style: const TextStyle(
@@ -371,9 +367,10 @@ class _EditProfileState extends State<EditProfile> {
                     child: ElevatedButton(
                       onPressed: () {
                         saveData();
-                        // _atualizarNomeFirestore();
+                        _atualizarNomeFirestore();
+                        _recuperaGage();
                         _atualizarUrlImagemFirestore(_urlImagemRecuperada);
-                        Navigator.pushReplacementNamed(context, "/profile");
+                         Navigator.pushReplacementNamed(context, "/profile");
                       },
                       style: TextButton.styleFrom(
                           padding: const EdgeInsets.fromLTRB(22, 12, 22, 12),

@@ -20,23 +20,17 @@ class _ProfileState extends State<Profile>{
 
   String _emailUser = "";
 
+
   
   
 
 
 
- Future  _recuperarEmail() async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    User usuarioLogado = auth.currentUser!;
 
-    setState(() {
-      _emailUser = usuarioLogado.email!;
-    });
-  }
 
   @override
   void initState() {
-    _recuperarEmail();
+
     super.initState();
   }
 

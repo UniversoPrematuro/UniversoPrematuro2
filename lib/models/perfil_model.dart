@@ -54,7 +54,7 @@ class Perfil extends Usuario{
 
   @override
   set gage(int value){
-    _gage = (value / 7) as int?;
+    _gage = value ;
   }
 
   @override

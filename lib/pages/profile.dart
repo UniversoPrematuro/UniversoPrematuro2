@@ -120,7 +120,7 @@ class _ProfileState extends State<Profile>{
                     
                     
                          const Padding(
-                           padding: EdgeInsets.only(left: 70),
+                           padding: EdgeInsets.only(left: 88, bottom: 50),
                            child: CircleAvatar(
                            radius: 55,
                            backgroundColor: Colors.black,
@@ -128,7 +128,7 @@ class _ProfileState extends State<Profile>{
                          ),
                       
                       Padding(
-                        padding: const EdgeInsets.only( top: 180,right: 80),
+                        padding:  EdgeInsets.only( top: 120, right: 10),
                         child: OutlinedButton(
                             onPressed: (){
                                 Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const EditProfile()));

@@ -1,5 +1,3 @@
-// ignore_for_file: unnecessary_null_comparison
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -111,11 +109,20 @@ class _EditProfileState extends State<EditProfile> {
    _atualizarNomeFirestore(){
 
      String nome = _controllerNome.text;
+     String nomeMae = _controllerNomeMae.text;
+    String birth = _controllerBirth.text;
+    String gender = _controllerGender.text;
+    int gage = int.parse(_controllerGage.text.substring(9,11))*7 +
+              int.parse(_controllerGage.text.substring(20,31));
      
      FirebaseFirestore db = FirebaseFirestore.instance;
 
      Map<String, dynamic> dadosAtualizar = {
        "nome" : nome,
+       "mae" : nomeMae,
+      "nascimento" : birth,
+      "genero" : gender,
+       "gage" : gage
      };
 
      db.collection("users")
@@ -135,7 +142,8 @@ class _EditProfileState extends State<EditProfile> {
     String nomeMae = _controllerNomeMae.text;
     String birth = _controllerBirth.text;
     String gender = _controllerGender.text;
-     String gage = _controllerGage.text;
+    int gage = (int.parse(_controllerGage.text.substring(9,11))*7 + int.parse(_controllerGage.text.substring(20,21)));
+
 
 
     Map<String,dynamic> data = {
@@ -143,21 +151,16 @@ class _EditProfileState extends State<EditProfile> {
       "mae" : nomeMae,
       "nascimento" : birth,
       "genero" : gender,
-       "gage" : gage,
+      "gage": gage
+      
     };
     db.collection("users").doc(_idUsuarioLogado).update(data);
     
   }
 
-  _recuperaGage(){
-    num gage = int.parse(_controllerGage.text.substring(9,11))*7 +
-              int.parse(_controllerGage.text.substring(20,21));
-    FirebaseFirestore db = FirebaseFirestore.instance;
-    Map<String, num> gAge = {
-      "gage" : gage
-    };
-    db.collection("users").doc(_idUsuarioLogado).update(gAge);
-  }
+
+
+  
 
   //  Future idadeReal(gage)async{
   //    int gage = int.parse(_controllerGage.text.substring(9,11))*7 +
@@ -206,6 +209,7 @@ class _EditProfileState extends State<EditProfile> {
   void initState() {
     super.initState();
     saveData();
+
   }
 
   @override
@@ -367,10 +371,8 @@ class _EditProfileState extends State<EditProfile> {
                     child: ElevatedButton(
                       onPressed: () {
                         saveData();
-                        _atualizarNomeFirestore();
-                        _recuperaGage();
                         _atualizarUrlImagemFirestore(_urlImagemRecuperada);
-                         Navigator.pushReplacementNamed(context, "/profile");
+                        //  Navigator.pushReplacementNamed(context, "/profile");
                       },
                       style: TextButton.styleFrom(
                           padding: const EdgeInsets.fromLTRB(22, 12, 22, 12),

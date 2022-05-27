@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:universoprematurov8/pages/login.dart';
+import '../models/perfil_model.dart';
 import '../pages/edit_profile.dart';
 
 // import 'home.dart';
@@ -17,14 +18,27 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile>{
-
-  String _emailUser = "";
-
-
+  String? _idUsuarioLogado;
+    
   
   
+  // _recuperaDados() async {
 
+    
+  //   FirebaseAuth auth = FirebaseAuth.instance;
+  //   User usuarioLogado = auth.currentUser!;
+  //   _idUsuarioLogado = usuarioLogado.uid;
 
+  //   FirebaseFirestore db = FirebaseFirestore.instance;
+  //   DocumentSnapshot snapshot = await db.collection("usuarios")
+  //     .doc("003")
+  //     .get();
+  //       var dados = snapshot.data();
+  //       print("Dados exibicao: " + dados["nome"] );
+
+    
+    
+  // }
 
 
 
@@ -43,19 +57,31 @@ class _ProfileState extends State<Profile>{
         backgroundColor: Colors.green,
         centerTitle: true,
         elevation: 2,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: (){
-             Navigator.pushReplacement(
-               context, MaterialPageRoute(builder: (context) => const Login())
+        // leading: IconButton(
+        //   icon: const Icon(Icons.arrow_back_ios_new),
+        //   onPressed: (){
+        //      Navigator.pushReplacement(
+        //        context, MaterialPageRoute(builder: (context) => const Login())
                
-               );
-          },
-        ),
-      ),
+        //        );
+        //   },
+        actions: [IconButton(
+          icon:const Icon(Icons.door_back_door_outlined),
+          onPressed: (() {
+            FirebaseAuth.instance.signOut();
+            Navigator.pushReplacementNamed(context, "/login");
+
+            }
+          )
+        )
+      ],
+    ),
+
        body: Column(
         children: <Widget>[
           Container(
+          
+            
             padding: const EdgeInsets.only(top: 16),
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height / 2,
@@ -66,22 +92,70 @@ class _ProfileState extends State<Profile>{
                   bottomRight: Radius.circular(32),
                   bottomLeft: Radius.circular(32)),
             ),
+            
             child: Center(
               child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                    ),
-                      const CircleAvatar(
-                        radius: 75,
-                        backgroundColor: Colors.black,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16),
+                        child: Column(
+                          children: const <Widget>[
+                            Text('Nome: ',
+                              style: TextStyle(
+                                color: Colors.white
+                              ),
+                            ),
+                            Text('12',
+                              style: TextStyle(
+                                color: Colors.white
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    
+                    
+                         const Padding(
+                           padding: EdgeInsets.only(left: 70),
+                           child: CircleAvatar(
+                           radius: 55,
+                           backgroundColor: Colors.black,
+                           ),
+                         ),
+                      
+                      Padding(
+                        padding: const EdgeInsets.only( top: 180,right: 80),
+                        child: OutlinedButton(
+                            onPressed: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const EditProfile()));
+                              },
+                            style: ButtonStyle(
+                               side: MaterialStateProperty.all(const BorderSide(width: 0.75, color:  Color.fromARGB(255, 255, 255, 255),)),
+                              backgroundColor: MaterialStateProperty.all(
+                                const Color.fromARGB(0, 255, 255, 255)),
+                                shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14))),
+                                  minimumSize: MaterialStateProperty.all(const Size(75,40)),
+                                  padding: MaterialStateProperty.all(
+                                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0)
+                                  ),
+                                ),
+                            child: const Text("Editar Perfil", style: TextStyle(
+                              color: Colors.white, fontSize: 15
+                              ),
+                            ),
+                          ),
                       ),
                   ],
                 ),
+                  ]
               ),
-              
-              )
+            )
+          )
           )
         ]
         

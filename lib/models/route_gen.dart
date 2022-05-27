@@ -5,6 +5,7 @@ import 'package:universoprematurov8/pages/register.dart';
 import '../pages/edit_profile.dart';
 import '../pages/login.dart';
 import '../pages/profile.dart';
+import '../pages/resetpass.dart';
 
 class RouteGenerator {
 
@@ -31,8 +32,12 @@ class RouteGenerator {
           );
       case "/editprofile" :
         return MaterialPageRoute(
-          builder: (_) => const EditProfile()
+          builder: (_) =>  const EditProfile()
           );
+      case "/resetpassword" : 
+        return MaterialPageRoute(
+          builder:(_) => const ResetPassword(),
+        );
       default:
       _erroRota();
     }

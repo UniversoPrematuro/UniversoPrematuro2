@@ -29,6 +29,7 @@ class _HomeState extends State<Home> {
                 Navigator.pushReplacementNamed(context, "/login");
               },
               style: ButtonStyle(
+                alignment: Alignment.center,
                 backgroundColor: MaterialStateProperty.all(
                   const Color.fromARGB(255, 101, 187, 88)),
                   shape: MaterialStateProperty.all(RoundedRectangleBorder(
@@ -52,6 +53,7 @@ class _HomeState extends State<Home> {
                   Navigator.pushReplacementNamed(context, "/register");
                 },
                 style: ButtonStyle(
+                  alignment: Alignment.center,
                   backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 255, 255, 255)),
                   shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
                   minimumSize: MaterialStateProperty.all(const Size(75,40)),

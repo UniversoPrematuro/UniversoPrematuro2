@@ -70,10 +70,10 @@ class _LoginState extends State<Login> {
 
   Future _verificaLogado() async {
     FirebaseAuth auth = FirebaseAuth.instance;
-    auth.signOut();
+
 
     User usuarioLogado = await auth.currentUser!;
-    if(usuarioLogado != null){
+    if(usuarioLogado != null ){
       Navigator.pushReplacementNamed(context, "/profile");
     }
 
@@ -170,6 +170,7 @@ class _LoginState extends State<Login> {
                               }
                             },
                             style: ButtonStyle(
+                              alignment: Alignment.center,
                               backgroundColor: MaterialStateProperty.all(
                                 const Color.fromARGB(255, 101, 187, 88)),
                                 shape: MaterialStateProperty.all(RoundedRectangleBorder(
@@ -186,7 +187,7 @@ class _LoginState extends State<Login> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 15),
+                          padding: const EdgeInsets.only(top: 1),
                           child: Center(
                             child: Text(
                               _errorMessage, 
@@ -198,7 +199,40 @@ class _LoginState extends State<Login> {
                               ),
                             ),
                           ),
-                        )
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5, bottom: 10),
+                          child: OutlinedButton(
+                            onPressed: (){
+                              Navigator.pushReplacementNamed(context, "/resetpassword");
+                            },
+                            
+                            style:  ButtonStyle(
+                              
+                              side: MaterialStateProperty.all(const BorderSide(width: 1.5, color: Colors.green, style: BorderStyle.solid)),
+                              alignment: Alignment.center,
+                              backgroundColor: MaterialStateProperty.all(const Color.fromARGB(0, 0, 0, 0)),
+                            
+                            shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            )),
+
+                            minimumSize: MaterialStateProperty.all(const Size(50,25)),
+                            padding: MaterialStateProperty.all(
+                              const EdgeInsets.symmetric(vertical: 8, horizontal: 40)
+
+                            )
+                              ),
+
+                            child: const Text(
+                              "Esqueceu sua senha?", 
+                              style: TextStyle(
+                                color: Colors.green, fontSize: 15, fontWeight: FontWeight.bold
+                              )
+                            )
+                          ),
+                          
+                          )
                       ],
                     )
                   ),

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'login.dart';
@@ -11,6 +12,11 @@ class ResetPassword extends StatefulWidget {
 
 class _ResetPasswordState extends State<ResetPassword> {
   TextEditingController _controllerEmail = TextEditingController();
+
+  changePass(){
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User usuarioLogado = auth.currentUser!;
+  }
   
 
   @override
@@ -43,13 +49,13 @@ class _ResetPasswordState extends State<ResetPassword> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(bottom: 40),
-                    child: Image.asset("images/logo/LogoMov.gif", width: 200, height: 150),
+                    child: Image.asset("images/logo/LogoMov.gif", width: 250, height: 180),
                   ),
                   Card(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)
                     ),
-                    elevation: 20,
+                    elevation: 30,
                     child: Padding(
                       padding: const EdgeInsets.all(50),
                       child: Column(
@@ -72,12 +78,13 @@ class _ResetPasswordState extends State<ResetPassword> {
                             controller: _controllerEmail,
                             autofocus: true,
                             keyboardType: TextInputType.emailAddress,
-                            style: const TextStyle(fontSize: 20),
+                            style: const TextStyle(fontSize: 15),
                             decoration:  InputDecoration(
                               floatingLabelAlignment: FloatingLabelAlignment.center,
                               focusedBorder: UnderlineInputBorder(
-                                borderRadius: BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(10),
                                 borderSide: const BorderSide(
+                                  width: 5,
                                   color: Colors.green
                                 )
                               ),
@@ -93,7 +100,12 @@ class _ResetPasswordState extends State<ResetPassword> {
                           Padding(
                             padding: const EdgeInsets.only(top: 55),
                             child: ElevatedButton(
-                              onPressed: (){},
+                              onPressed: (){
+                                FirebaseAuth.instance
+                                .sendPasswordResetEmail(email: _controllerEmail.text)
+                                .then((value) => Navigator.pushReplacementNamed(context, "/login"));
+
+                              },
                               style: ButtonStyle(
                                 alignment: Alignment.center,
                                 backgroundColor: MaterialStateProperty.all(
@@ -106,7 +118,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                                 minimumSize: MaterialStateProperty.all(const Size(70, 40)),
                                 padding: MaterialStateProperty.all(const EdgeInsets.symmetric(vertical: 10, horizontal: 40))
                               ),
-                              child: Text("Recuperar senha"),
+                              child: const Text("Recuperar senha"),
                             ),
                             
                             )

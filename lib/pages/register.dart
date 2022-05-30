@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../models/perfil_model.dart';
 
 import '../models/usuario_model.dart';
+import 'edit_profile.dart';
 import 'home.dart';
 
 class Register extends StatefulWidget {
@@ -72,7 +73,6 @@ class _RegisterState extends State<Register> {
 
   _cadastrarUsuario( Usuario usuario ){
     FirebaseAuth auth = FirebaseAuth.instance;
-
     auth.createUserWithEmailAndPassword(
       email: usuario.email, password: usuario.passw
       ).then((firebaseUser){
@@ -91,6 +91,7 @@ class _RegisterState extends State<Register> {
       }
 
       );
+    
 
     
   }
@@ -183,7 +184,9 @@ class _RegisterState extends State<Register> {
                     padding: const EdgeInsets.only(top: 25),
                     child: ElevatedButton(
                       onPressed: () {
-                        if(_validarCampos() == true){
+                        if(_validarCampos() != true){
+                          _errorMessage;
+                        } else {
                           _cadastrarUsuario(Usuario());
                           _logarUsuario(Usuario());
                         }

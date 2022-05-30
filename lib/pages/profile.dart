@@ -15,36 +15,18 @@ class Profile extends StatefulWidget {
 
   @override
   State<Profile> createState() => _ProfileState();
+
 }
 
 class _ProfileState extends State<Profile>{
+
   String? _idUsuarioLogado;
-    
+
   
-  
-  // _recuperaDados() async {
-
-    
-  //   FirebaseAuth auth = FirebaseAuth.instance;
-  //   User usuarioLogado = auth.currentUser!;
-  //   _idUsuarioLogado = usuarioLogado.uid;
-
-  //   FirebaseFirestore db = FirebaseFirestore.instance;
-  //   DocumentSnapshot snapshot = await db.collection("usuarios")
-  //     .doc("003")
-  //     .get();
-  //       var dados = snapshot.data();
-  //       print("Dados exibicao: " + dados["nome"] );
-
-    
-    
-  // }
-
 
 
   @override
   void initState() {
-
     super.initState();
   }
 
@@ -57,14 +39,7 @@ class _ProfileState extends State<Profile>{
         backgroundColor: Colors.green,
         centerTitle: true,
         elevation: 2,
-        // leading: IconButton(
-        //   icon: const Icon(Icons.arrow_back_ios_new),
-        //   onPressed: (){
-        //      Navigator.pushReplacement(
-        //        context, MaterialPageRoute(builder: (context) => const Login())
-               
-        //        );
-        //   },
+      
         actions: [IconButton(
           icon:const Icon(Icons.door_back_door_outlined),
           onPressed: (() {
@@ -162,3 +137,4 @@ class _ProfileState extends State<Profile>{
       ));
   }
 }
+

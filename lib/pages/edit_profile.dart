@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -106,30 +108,108 @@ class _EditProfileState extends State<EditProfile> {
   }
   
   
-   _atualizarNomeFirestore(){
+  //  _atualizarNomeFirestore(){
 
-     String nome = _controllerNome.text;
-     String nomeMae = _controllerNomeMae.text;
-    String birth = _controllerBirth.text;
-    String gender = _controllerGender.text;
-    int gage = int.parse(_controllerGage.text.substring(9,11))*7 +
-              int.parse(_controllerGage.text.substring(20,31));
+  //    String nome = _controllerNome.text;
+  //    String nomeMae = _controllerNomeMae.text;
+  //   String birth = _controllerBirth.text;
+  //   String gender = _controllerGender.text;
+  //   int gage = int.parse(_controllerGage.text.substring(9,11))*7 +
+  //             int.parse(_controllerGage.text.substring(20,31));
      
-     FirebaseFirestore db = FirebaseFirestore.instance;
+  //    FirebaseFirestore db = FirebaseFirestore.instance;
 
-     Map<String, dynamic> dadosAtualizar = {
-       "nome" : nome,
-       "mae" : nomeMae,
-      "nascimento" : birth,
-      "genero" : gender,
-       "gage" : gage
-     };
+  //    Map<String, dynamic> dadosAtualizar = {
+  //      "nome" : nome,
+  //      "mae" : nomeMae,
+  //     "nascimento" : birth,
+  //     "genero" : gender,
+  //      "gage" : gage
+  //    };
 
-     db.collection("users")
-         .doc(_idUsuarioLogado)
-         .update( dadosAtualizar );
+  //    db.collection("users")
+  //        .doc(_idUsuarioLogado)
+  //        .update( dadosAtualizar );
 
-   }
+  //  }
+  final validateNome = StreamTransformer<String,String>.fromHandlers(
+      handleData: (name,sink){
+        if(name.length >= 5){
+          sink.add(name);
+        } else {
+          sink.addError('Digite um nome válido');
+        }
+      }
+  );
+  final validateBirth = StreamTransformer<String,String>.fromHandlers(
+      handleData: (birth,sink){
+        if(birth.length == 10){
+          int d = int.parse(birth.substring(0,2));
+          int m = int.parse(birth.substring(3,5));
+          int y = int.parse(birth.substring(6,10));
+          if(d >= 1 && d <= 31 && m >= 1 && m <=12 && y >= 2019){
+            sink.add(birth);
+          }else {
+            sink.addError('Digite uma data válida');
+          }
+        } else {
+          sink.addError('Digite a data completa');
+        }
+      }
+  );
+  final validateMother = StreamTransformer<String,String>.fromHandlers(
+      handleData: (mother,sink){
+        if(mother.length >= 5){
+          sink.add(mother);
+        } else {
+          sink.addError('Digite um nome válido');
+        }
+      }
+  );
+  final validateGage = StreamTransformer<String,String>.fromHandlers(
+      handleData: (gage,sink){
+        if(gage.length == 21){
+          int s = int.parse(gage.substring(9,11));
+          int d = int.parse(gage.substring(20,21));
+          if(s >= 22 && s <= 37 && d <= 6){
+            sink.add(gage);
+          }else {
+            sink.addError('Digite valores válidos');
+          }
+        } else {
+          sink.addError('Digite as semanas e os dias');
+        }
+      }
+  );
+  final validateGender = StreamTransformer<String,String>.fromHandlers(
+      handleData: (gender,sink){
+        if(gender == 'Masculino' || gender == 'Feminino'){
+          sink.add(gender);
+        } else {
+          sink.addError('Selecione uma opção');
+        }
+      }
+  );
+
+  final validateCell =  StreamTransformer<String,String>.fromHandlers(
+    handleData: (cell, sink) {
+      if(cell.length > 8 && cell.length < 15){
+        sink.add(cell);
+      } else {
+        sink.addError('Digite o número corretamente');
+      }
+    }
+  );
+
+  final validateCellButton = StreamTransformer<String,bool>.fromHandlers(
+    handleData: (cell,sink) {
+      if(cell.length > 8 && cell.length < 15){
+        sink.add(true);
+      } else {
+        sink.add(false);
+      }
+    }
+  );
 
   saveData()async{
     FirebaseAuth auth = FirebaseAuth.instance;
@@ -142,7 +222,10 @@ class _EditProfileState extends State<EditProfile> {
     String nomeMae = _controllerNomeMae.text;
     String birth = _controllerBirth.text;
     String gender = _controllerGender.text;
-    int gage = (int.parse(_controllerGage.text.substring(9,11))*7 + int.parse(_controllerGage.text.substring(20,21)));
+    String gage = _controllerGage.text;
+
+
+
 
 
 
@@ -151,21 +234,14 @@ class _EditProfileState extends State<EditProfile> {
       "mae" : nomeMae,
       "nascimento" : birth,
       "genero" : gender,
-      "gage": gage
+      "gage" : gage,
+
       
     };
     db.collection("users").doc(_idUsuarioLogado).update(data);
     
   }
 
-
-
-  
-
-  //  Future idadeReal(gage)async{
-  //    int gage = int.parse(_controllerGage.text.substring(9,11))*7 +
-  //              int.parse(_controllerGage.text.substring(20,21));
-  //  }
 
   _atualizarUrlImagemFirestore(String url){
 
@@ -194,6 +270,12 @@ class _EditProfileState extends State<EditProfile> {
 
     Map<String, dynamic>? dados = snapshot.data() as Map<String, dynamic>?;
     _controllerNome.text = dados!["nome"];
+    _controllerNomeMae.text = dados["mae"];
+    _controllerBirth.text = dados["nascimento"];
+    _controllerGender.text = dados["genero"];
+    _controllerGage.text = dados["gage"];
+
+
 
     if( dados["urlImagem"] != null ){
       _urlImagemRecuperada = dados["urlImagem"];
@@ -208,7 +290,9 @@ class _EditProfileState extends State<EditProfile> {
   @override
   void initState() {
     super.initState();
-    saveData();
+    if(_idUsuarioLogado == _idUsuarioLogado){
+      _recuperarDadosUsuario();
+    }
 
   }
 
@@ -372,7 +456,7 @@ class _EditProfileState extends State<EditProfile> {
                       onPressed: () {
                         saveData();
                         _atualizarUrlImagemFirestore(_urlImagemRecuperada);
-                        //  Navigator.pushReplacementNamed(context, "/profile");
+                         Navigator.pushReplacementNamed(context, "/profile");
                       },
                       style: TextButton.styleFrom(
                           padding: const EdgeInsets.fromLTRB(22, 12, 22, 12),

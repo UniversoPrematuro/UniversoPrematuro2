@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:universoprematurov8/pages/login.dart';
+import 'package:universoprematurov8/repositories/prof_rep.dart';
 import '../models/perfil_model.dart';
 import '../pages/edit_profile.dart';
 
@@ -18,7 +19,7 @@ class Profile extends StatefulWidget {
 
 }
 
-class _ProfileState extends State<Profile>{
+class _ProfileState extends State<Profile> with ProfileState{
 
   String? _idUsuarioLogado;
 
@@ -27,6 +28,9 @@ class _ProfileState extends State<Profile>{
 
   @override
   void initState() {
+    if(instance.idUsuarioLogado == instance.idUsuarioLogado){
+    instance.recuperarDadosUsuario();
+    }
     super.initState();
   }
 
@@ -73,20 +77,28 @@ class _ProfileState extends State<Profile>{
                 child: Column(
                   children: <Widget>[
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.only(left: 16),
                         child: Column(
-                          children: const <Widget>[
-                            Text('Nome: ',
-                              style: TextStyle(
-                                color: Colors.white
+                          children:  <Widget>[
+                            Text('Nome: ${instance.controllerNome.text} ',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600
                               ),
                             ),
-                            Text('12',
-                              style: TextStyle(
-                                color: Colors.white
+                            Text('Mãe: ${instance.controllerNomeMae.text}',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600
+                              ),
+                            ),
+                            Text('Aniversario: ${instance.controllerBirth.text}',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600
                               ),
                             )
                           ],
@@ -94,37 +106,38 @@ class _ProfileState extends State<Profile>{
                       ),
                     
                     
-                         const Padding(
-                           padding: EdgeInsets.only(left: 88, bottom: 50),
+                         Padding(
+                           padding: EdgeInsets.only(/*left: 88, bottom: 200*/),
                            child: CircleAvatar(
                            radius: 55,
                            backgroundColor: Colors.black,
+                           backgroundImage: NetworkImage(instance.urlImagemRecuperada),
                            ),
                          ),
                       
-                      Padding(
-                        padding:  EdgeInsets.only( top: 120, right: 10),
-                        child: OutlinedButton(
-                            onPressed: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const EditProfile()));
-                              },
-                            style: ButtonStyle(
-                               side: MaterialStateProperty.all(const BorderSide(width: 0.75, color:  Color.fromARGB(255, 255, 255, 255),)),
-                              backgroundColor: MaterialStateProperty.all(
-                                const Color.fromARGB(0, 255, 255, 255)),
-                                shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(14))),
-                                  minimumSize: MaterialStateProperty.all(const Size(75,40)),
-                                  padding: MaterialStateProperty.all(
-                                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0)
-                                  ),
-                                ),
-                            child: const Text("Editar Perfil", style: TextStyle(
-                              color: Colors.white, fontSize: 15
-                              ),
-                            ),
-                          ),
-                      ),
+                      // Padding(
+                      //   padding:  EdgeInsets.only( top: 120, right: 10),
+                      //   child: OutlinedButton(
+                      //       onPressed: (){
+                      //           Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const EditProfile()));
+                      //         },
+                      //       style: ButtonStyle(
+                      //          side: MaterialStateProperty.all(const BorderSide(width: 0.75, color:  Color.fromARGB(255, 255, 255, 255),)),
+                      //         backgroundColor: MaterialStateProperty.all(
+                      //           const Color.fromARGB(0, 255, 255, 255)),
+                      //           shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                      //             borderRadius: BorderRadius.circular(14))),
+                      //             minimumSize: MaterialStateProperty.all(const Size(75,40)),
+                      //             padding: MaterialStateProperty.all(
+                      //               const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0)
+                      //             ),
+                      //           ),
+                      //       child: const Text("Editar Perfil", style: TextStyle(
+                      //         color: Colors.white, fontSize: 15
+                      //         ),
+                      //       ),
+                      //     ),
+                      // ),
                   ],
                 ),
                   ]

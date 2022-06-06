@@ -5,17 +5,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:universoprematurov8/pages/edit_profile.dart';
+import 'package:universoprematurov8/pages/profile.dart';
 import 'dart:io';
 import '../models/perfil_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
-class ProfState extends State<EditProfile> {
+class ProfState extends State<EditProfile>{
+
   final TextEditingController controllerNome = TextEditingController();
   final TextEditingController controllerNomeMae = TextEditingController();
   final TextEditingController controllerBirth = TextEditingController();
   final TextEditingController controllerGage = TextEditingController();
   final TextEditingController controllerGender = TextEditingController();
+
   var maskDate = MaskTextInputFormatter(
       mask: '##/##/####',
       filter: {"#": RegExp(r'[0-9]')},
@@ -30,8 +33,18 @@ class ProfState extends State<EditProfile> {
   String _emailUser = "";
   @override
   void initState() {
+    (){
+      FirebaseAuth auth = FirebaseAuth.instance;
+      User usuarioLogado = auth.currentUser!;
+      if(idUsuarioLogado == auth.currentUser!.uid){
+        recuperarDadosUsuario();
+      }
+    };
+    urlImagemRecuperada;
     super.initState();
   }
+
+  
 
   Future _recuperarEmail() async {
     FirebaseAuth auth = FirebaseAuth.instance;
@@ -129,6 +142,12 @@ class ProfState extends State<EditProfile> {
 
   //  }
 
+  Future trueGage() async {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    int gage = controllerGage.text as int;
+    gage = gage * 7 + gage;
+  }
+
   saveData() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User usuarioLogado = auth.currentUser!;
@@ -147,7 +166,7 @@ class ProfState extends State<EditProfile> {
       "mae": nomeMae,
       "nascimento": birth,
       "genero": gender,
-      "gage": gage,
+      "gage": gage
     };
     db.collection("users").doc(idUsuarioLogado).update(data);
     setState(() {
@@ -189,11 +208,18 @@ class ProfState extends State<EditProfile> {
     if (dados["urlImagem"] != null) {
       urlImagemRecuperada = dados["urlImagem"];
     }
+    setState(() {
+      String nome = controllerNome.text;
+      String nomeMae = controllerNomeMae.text;
+      String birth = controllerBirth.text;
+      String gender = controllerGender.text;
+      String gage = controllerGage.text;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    throw UnimplementedError();
+    return Container();
   }
 }
 
@@ -201,5 +227,9 @@ mixin ProfileState {
   var instance = ProfState();
   Future setDados() async {
     var dados = instance.saveData();
+  }
+
+  Future photo() async {
+    var foto = instance.urlImagemRecuperada;
   }
 }

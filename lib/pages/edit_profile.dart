@@ -1,6 +1,11 @@
 // ignore_for_file: unnecessary_null_comparison
 
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:universoprematurov8/pages/profile.dart';
 import 'package:universoprematurov8/repositories/prof_rep.dart';
 
@@ -11,16 +16,79 @@ class EditProfile extends StatefulWidget {
   State<EditProfile> createState() => _EditProfileState();
 }
 
-class _EditProfileState extends State<EditProfile> with ProfileState {
+class _EditProfileState extends State<EditProfile> with ProfileState{
+
+  FirebaseStorage storage = FirebaseStorage.instance;
+  XFile? imagem;
+  String? idUsuarioLogado;
+  bool subindoImagem = false;
+  String urlImagemRecuperada = "";
+  String mensagem = "";
+
+  Future recuperarImagem(String origemImagem) async {
+    final ImagePicker _picker = ImagePicker();
+    XFile? imagemSelecionada;
+    FirebaseStorage storage = FirebaseStorage.instance;
+    if (origemImagem == "camera") {
+      imagemSelecionada = await _picker.pickImage(source: ImageSource.camera);
+      setState(() {
+        imagem = imagemSelecionada;
+        if (imagem != null) {
+          uploadImagem();
+          subindoImagem = true;
+        }
+      });
+    } else if (origemImagem == "galeria") {
+      imagemSelecionada = await _picker.pickImage(source: ImageSource.gallery);
+    }
+    setState(() {
+      imagem = imagemSelecionada;
+      if (imagem != null) {
+        uploadImagem();
+        subindoImagem = true;
+      }
+    });
+  }
+
+  Future uploadImagem() async {
+    File file = File(imagem!.path);
+    Reference pastaRaiz = await storage.ref();
+    Reference arquivo =
+        await pastaRaiz.child("perfil").child("${idUsuarioLogado!}.jpg");
+
+    UploadTask task = arquivo.putFile(file);
+
+    task.snapshotEvents.listen((TaskSnapshot storageEvent) {
+      if (storageEvent.state == TaskState.running) {
+        setState(() {
+          subindoImagem = true;
+        });
+      } else if (storageEvent.state == TaskState.success) {
+        setState(() {
+          subindoImagem = false;
+        });
+      }
+    });
+
+    task.then((TaskSnapshot taskSnapshot) => recuperarURLimagem(taskSnapshot));
+  }
+
+  Future recuperarURLimagem(TaskSnapshot taskSnapshot) async {
+    String url = await taskSnapshot.ref.getDownloadURL();
+    setState(() {
+      urlImagemRecuperada = url;
+    });
+  }
+
   @override
   void initState() {
-    instance.idUsuarioLogado;
-    if (instance.idUsuarioLogado == instance.idUsuarioLogado) {
+    if(idUsuarioLogado == idUsuarioLogado){
       instance.recuperarDadosUsuario();
     }
-    instance.urlImagemRecuperada;
     super.initState();
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -44,12 +112,12 @@ class _EditProfileState extends State<EditProfile> with ProfileState {
               CircleAvatar(
                   radius: 100,
                   backgroundColor: Colors.grey,
-                  backgroundImage: instance.urlImagemRecuperada != null
-                      ? NetworkImage(instance.urlImagemRecuperada)
+                  backgroundImage: urlImagemRecuperada != null
+                      ? NetworkImage(urlImagemRecuperada)
                       : null),
               Padding(
                   padding: const EdgeInsets.only(),
-                  child: instance.subindoImagem
+                  child: subindoImagem
                       ? const CircularProgressIndicator(
                           color: Colors.green,
                         )
@@ -61,14 +129,14 @@ class _EditProfileState extends State<EditProfile> with ProfileState {
                     child: const Text("Câmera",
                         style: TextStyle(color: Colors.green)),
                     onPressed: () {
-                      instance.recuperarImagem("camera");
+                      recuperarImagem("camera");
                     },
                   ),
                   TextButton(
                     child: const Text("Galeria",
                         style: TextStyle(color: Colors.green)),
                     onPressed: () {
-                      instance.recuperarImagem("galeria");
+                      recuperarImagem("galeria");
                     },
                   ),
                 ],
@@ -175,10 +243,11 @@ class _EditProfileState extends State<EditProfile> with ProfileState {
                   child: ElevatedButton(
                     onPressed: () {
                       instance.saveData();
-                      instance.atualizarUrlImagemFirestore(
-                          instance.urlImagemRecuperada);
-                      Navigator.pushReplacementNamed(context, "/profile");
+                      // instance.atualizarUrlImagemFirestore(urlImagemRecuperada);
+                      // Navigator.pushReplacementNamed(context, '/profile');
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const Profile()));
                     },
+                    
                     style: TextButton.styleFrom(
                         padding: const EdgeInsets.fromLTRB(22, 12, 22, 12),
                         shape: RoundedRectangleBorder(
@@ -193,7 +262,11 @@ class _EditProfileState extends State<EditProfile> with ProfileState {
                           fontWeight: FontWeight.w500),
                     ),
                   )),
-            ])))));
+            ]
+          )
+        )
+      )
+    ));
   }
 }
 

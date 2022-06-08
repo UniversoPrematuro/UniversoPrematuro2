@@ -82,9 +82,8 @@ class _EditProfileState extends State<EditProfile> with ProfileState{
 
   @override
   void initState() {
-    if(idUsuarioLogado == idUsuarioLogado){
-      instance.recuperarDadosUsuario();
-    }
+    instance.recuperarDadosUsuario();
+    urlImagemRecuperada;
     super.initState();
   }
 
@@ -109,12 +108,6 @@ class _EditProfileState extends State<EditProfile> with ProfileState{
             child: Center(
                 child: SingleChildScrollView(
                     child: Column(children: <Widget>[
-              CircleAvatar(
-                  radius: 100,
-                  backgroundColor: Colors.grey,
-                  backgroundImage: urlImagemRecuperada != null
-                      ? NetworkImage(urlImagemRecuperada)
-                      : null),
               Padding(
                   padding: const EdgeInsets.only(),
                   child: subindoImagem
@@ -122,6 +115,12 @@ class _EditProfileState extends State<EditProfile> with ProfileState{
                           color: Colors.green,
                         )
                       : Container()),
+              CircleAvatar(
+                  radius: 100,
+                  backgroundColor: Colors.grey,
+                  backgroundImage: urlImagemRecuperada != null
+                      ? NetworkImage(urlImagemRecuperada)
+                      : null),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -244,8 +243,8 @@ class _EditProfileState extends State<EditProfile> with ProfileState{
                     onPressed: () {
                       instance.saveData();
                       // instance.atualizarUrlImagemFirestore(urlImagemRecuperada);
-                      // Navigator.pushReplacementNamed(context, '/profile');
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const Profile()));
+                      Navigator.pushReplacementNamed(context, '/nav');
+                      // Navigator.push(context, MaterialPageRoute(builder: (context) => const Profile()));
                     },
                     
                     style: TextButton.styleFrom(

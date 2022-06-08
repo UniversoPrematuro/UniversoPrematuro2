@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:universoprematurov8/pages/home.dart';
-import 'package:universoprematurov8/pages/register.dart';
+import '/pages/home.dart';
+import '/pages/register.dart';
 
 import '../pages/edit_profile.dart';
 import '../pages/login.dart';
+import '../pages/nav.dart';
 import '../pages/profile.dart';
 import '../pages/resetpass.dart';
 
@@ -34,6 +35,10 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (_) =>  const EditProfile()
           );
+      case "/nav" : 
+        return MaterialPageRoute(
+          builder:(_) =>  const Nav(),
+        );
       case "/resetpassword" : 
         return MaterialPageRoute(
           builder:(_) => const ResetPassword(),

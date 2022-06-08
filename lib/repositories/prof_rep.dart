@@ -208,13 +208,13 @@ class ProfState extends State<EditProfile>{
     if (dados["urlImagem"] != null) {
       urlImagemRecuperada = dados["urlImagem"];
     }
-    setState(() {
-      String nome = controllerNome.text;
-      String nomeMae = controllerNomeMae.text;
-      String birth = controllerBirth.text;
-      String gender = controllerGender.text;
-      String gage = controllerGage.text;
-    });
+    // setState(() {
+    //   String nome = controllerNome.text;
+    //   String nomeMae = controllerNomeMae.text;
+    //   String birth = controllerBirth.text;
+    //   String gender = controllerGender.text;
+    //   String gage = controllerGage.text;
+    // });
   }
 
   @override

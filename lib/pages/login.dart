@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../models/usuario_model.dart';
-import 'home.dart';
+import '../pages/home.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -56,7 +56,7 @@ class _LoginState extends State<Login> {
     auth.signInWithEmailAndPassword(email: usuario.email, password: usuario.passw)
     .then((firebaseUser){
 
-      Navigator.pushReplacementNamed(context, "/profile");
+      Navigator.pushReplacementNamed(context, "/nav");
 
     }).catchError((error){
       setState(() {
@@ -81,7 +81,6 @@ class _LoginState extends State<Login> {
 
   @override
   void initState() {
-    _verificaLogado();
     super.initState();
   }
 
@@ -166,7 +165,7 @@ class _LoginState extends State<Login> {
                             onPressed: (){
                               if(_validarCampos() == true){
                                 _logarUsuario(Usuario());
-                                Navigator.pushReplacementNamed(context, "/profile");
+                                Navigator.pushReplacementNamed(context, "/nav");
                               }
                             },
                             style: ButtonStyle(

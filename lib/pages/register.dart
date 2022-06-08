@@ -29,7 +29,7 @@ class _RegisterState extends State<Register> {
     auth.signInWithEmailAndPassword(email: usuario.email, password: usuario.passw)
     .then((firebaseUser){
 
-      Navigator.pushReplacementNamed(context, "/profile");
+      Navigator.pushReplacementNamed(context, "/nav");
 
     }).catchError((error){
       setState(() {
@@ -190,7 +190,7 @@ class _RegisterState extends State<Register> {
                           _cadastrarUsuario(Usuario());
                           _logarUsuario(Usuario());
                         }
-                          Navigator.pushReplacementNamed(context, "/editprofile");
+                          Navigator.pushReplacementNamed(context, "/nav");
                         
                       },
                       style: TextButton.styleFrom(

@@ -23,10 +23,19 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> with ProfileState{
  
+
+  int opcaoS = 0;
+  List<Widget> pages = [
+    Profile(),
+    EditProfile(),
+
+  ];
+
+
   @override
   void initState() {    
-    super.initState();
     instance.recuperarDadosUsuario();
+    super.initState();
   }
 
 
@@ -35,7 +44,7 @@ class _ProfileState extends State<Profile> with ProfileState{
     
 
     return  DefaultTabController(
-          length: 3,
+          length: 2,
           child: Scaffold(
           appBar: AppBar(
             title: const Text("Perfil"),
@@ -59,7 +68,7 @@ class _ProfileState extends State<Profile> with ProfileState{
               Container(
                 padding: const EdgeInsets.only(top: 16),
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height / 3,
+                height: MediaQuery.of(context).size.height / 4,
                 decoration: const BoxDecoration(
 
                   color: Colors.green,
@@ -115,36 +124,8 @@ class _ProfileState extends State<Profile> with ProfileState{
                                radius: 55,
                                backgroundColor: Colors.black,
                                backgroundImage: NetworkImage(instance.urlImagemRecuperada),
-                               ),
-                             ),
-
-                              
-                             
-
-                            //  Padding(
-                            //    padding:  EdgeInsets.only( top: 120, right: 10),
-                            //    child: OutlinedButton(
-                            //        onPressed: (){
-                            //            instance.recuperarDadosUsuario();
-                            //            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) =>  Lol()));
-                            //          },
-                            //        style: ButtonStyle(
-                            //           side: MaterialStateProperty.all(const BorderSide(width: 0.75, color:  Color.fromARGB(255, 255, 255, 255),)),
-                            //          backgroundColor: MaterialStateProperty.all(
-                            //            const Color.fromARGB(0, 255, 255, 255)),
-                            //            shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                            //              borderRadius: BorderRadius.circular(14))),
-                            //              minimumSize: MaterialStateProperty.all(const Size(75,40)),
-                            //              padding: MaterialStateProperty.all(
-                            //                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0)
-                            //              ),
-                            //            ),
-                            //        child: const Text("Editar Perfil", style: TextStyle(
-                            //          color: Colors.white, fontSize: 15
-                            //           ),
-                            //         ),
-                            //       ),
-                            //     ),
+                                 ),
+                                ),
                               ],
                             ),
                           ]
@@ -166,12 +147,11 @@ class _ProfileState extends State<Profile> with ProfileState{
                      Tab(
                        text: "Videos",
                        ),
-                       Tab(text: "Menu",)
                    ],
                    
                 ),
                 SizedBox(
-                  height: 330,
+                  height: MediaQuery.of(context).size.height/2,
                   child: TabBarView(
                     children: [
                       GridView.count(
@@ -251,39 +231,23 @@ class _ProfileState extends State<Profile> with ProfileState{
                           child: const Text('Revolution, they...'),
                         ),
                       ],
-                    ),
-                    GridView.count(
-                      primary: false,
-                      padding: const EdgeInsets.all(15),
-                      crossAxisSpacing: 150,
-                      mainAxisSpacing: 180,
-                      crossAxisCount: 2,
-                      children: <Widget>[
-                        IconButton(onPressed: () {
-                          Navigator.pushReplacementNamed(context, "/profile");
-                          
-                          }, 
-                          icon: Icon(Icons.home,),
-                          color: Colors.green,
-                          
-                          )
-                          
-                        
-                      ],
-                    ),
-                    ],
-                  ),
-                  
-                ),
-                 
-                  
+                    ),   
                 ],
-            
-              )
-            )
-          );
-      
-    
+              ),    
+            ),       
+          ],  
+        )
+      )
+    );
+  }
+}
+
+class Profile1 extends StatelessWidget {
+  const Profile1({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }
 

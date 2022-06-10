@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:universoprematurov8/pages/desenvolvimento/dev_home.dart';
+import '../pages/desenvolvimento/tasks/task_1.dart';
+import '../pages/desenvolvimento/tasks/task_2.dart';
 import '/pages/home.dart';
 import '/pages/register.dart';
 
@@ -42,6 +45,18 @@ class RouteGenerator {
       case "/resetpassword" : 
         return MaterialPageRoute(
           builder:(_) => const ResetPassword(),
+        );
+      case "/desenvolvimento" : 
+        return MaterialPageRoute(
+          builder:(_) => Desenvolvimento(),
+        );
+      case "/taskone" : 
+        return MaterialPageRoute(
+          builder:(_) => TaskOne(),
+        );
+      case "/tasktwo" : 
+        return MaterialPageRoute(
+          builder:(_) => TaskTwo(),
         );
       default:
       _erroRota();

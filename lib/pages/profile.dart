@@ -24,13 +24,6 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> with ProfileState{
  
 
-  int opcaoS = 0;
-  List<Widget> pages = [
-    Profile(),
-    EditProfile(),
-
-  ];
-
 
   @override
   void initState() {    
@@ -117,7 +110,9 @@ class _ProfileState extends State<Profile> with ProfileState{
                               
                               
                             ),
+                            
                           ),
+            
                              Padding(
                                padding: EdgeInsets.only(/*left: 88, bottom: 200*/),
                                child: CircleAvatar(
@@ -126,6 +121,7 @@ class _ProfileState extends State<Profile> with ProfileState{
                                backgroundImage: NetworkImage(instance.urlImagemRecuperada),
                                  ),
                                 ),
+                                ElevatedButton(onPressed: (){Navigator.pushReplacementNamed(context, "/desenvolvimento");}, child: Text("Editar"))
                               ],
                             ),
                           ]
@@ -159,7 +155,106 @@ class _ProfileState extends State<Profile> with ProfileState{
                       padding: const EdgeInsets.all(20),
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 10,
-                      crossAxisCount: 2,
+                      crossAxisCount: 4,
+                      children: <Widget>[
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          color: Colors.teal[100],
+                          child: const Text("He'd have you all unravel at the"),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          color: Colors.teal[200],
+                          child: const Text('Heed not the rabble'),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          color: Colors.teal[300],
+                          child: const Text('Sound of screams but the'),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          color: Colors.teal[400],
+                          child: const Text('Who scream'),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          color: Colors.teal[500],
+                          child: const Text('Revolution is coming...'),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          color: Colors.teal[600],
+                          child: const Text('Revolution, they...'),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          color: Colors.teal[600],
+                          child: const Text('Revolution, they...'),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          color: Colors.teal[600],
+                          child: const Text('Revolution, they...'),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          color: Colors.teal[600],
+                          child: const Text('Revolution, they...'),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          color: Colors.teal[600],
+                          child: const Text('Revolution, they...'),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          color: Colors.teal[600],
+                          child: const Text('Revolution, they...'),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          color: Colors.teal[600],
+                          child: const Text('Revolution, they...'),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          color: Colors.teal[600],
+                          child: const Text('Revolution, they...'),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          color: Colors.teal[600],
+                          child: const Text('Revolution, they...'),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          color: Colors.teal[600],
+                          child: const Text('Revolution, they...'),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          color: Colors.teal[600],
+                          child: const Text('Revolution, they...'),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          color: Colors.teal[600],
+                          child: const Text('Revolution, they...'),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          color: Colors.teal[600],
+                          child: const Text('Revolution, they...'),
+                        ),
+                      ],
+                    ),
+                      GridView.count(
+                      primary: false,
+                      padding: const EdgeInsets.all(20),
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                      crossAxisCount: 4,
                       children: <Widget>[
                         Container(
                           padding: const EdgeInsets.all(8),
@@ -193,50 +288,28 @@ class _ProfileState extends State<Profile> with ProfileState{
                         ),
                       ],
                     ),
-                      GridView.count(
-                      primary: false,
-                      padding: const EdgeInsets.all(20),
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      crossAxisCount: 2,
-                      children: <Widget>[
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          color: Colors.teal[100],
-                          child: const Text("He'd have you all unravel at the"),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          color: Colors.teal[200],
-                          child: const Text('Heed not the rabble'),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          color: Colors.teal[300],
-                          child: const Text('Sound of screams but the'),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          color: Colors.teal[400],
-                          child: const Text('Who scream'),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          color: Colors.teal[500],
-                          child: const Text('Revolution is coming...'),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          color: Colors.teal[600],
-                          child: const Text('Revolution, they...'),
-                        ),
-                      ],
-                    ),   
                 ],
               ),    
             ),       
+                    Padding(
+                      padding: const EdgeInsets.only(top: 7),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height/15,
+                        decoration: const BoxDecoration(
+                          color: Colors.red
+                        ),
+                        child: GridView.count(
+                          crossAxisCount: 1,
+                          children: [
+                            IconButton(onPressed: (){}, icon: Icon(Icons.people_alt),color: Colors.black,)
+                          ],
+                        ),
+                      ),
+                    )  
           ],  
-        )
+        ),
+        
       )
     );
   }

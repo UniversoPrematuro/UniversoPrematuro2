@@ -56,7 +56,7 @@ class _LoginState extends State<Login> {
     auth.signInWithEmailAndPassword(email: usuario.email, password: usuario.passw)
     .then((firebaseUser){
 
-      Navigator.pushReplacementNamed(context, "/nav");
+      Navigator.pushReplacementNamed(context, "/profile");
 
     }).catchError((error){
       setState(() {
@@ -165,7 +165,7 @@ class _LoginState extends State<Login> {
                             onPressed: (){
                               if(_validarCampos() == true){
                                 _logarUsuario(Usuario());
-                                Navigator.pushReplacementNamed(context, "/nav");
+                                Navigator.pushReplacementNamed(context, "/profile");
                               }
                             },
                             style: ButtonStyle(

@@ -190,7 +190,7 @@ class _RegisterState extends State<Register> {
                           _cadastrarUsuario(Usuario());
                           _logarUsuario(Usuario());
                         }
-                          Navigator.pushReplacementNamed(context, "/nav");
+                          Navigator.pushReplacementNamed(context, "/editprofile");
                         
                       },
                       style: TextButton.styleFrom(

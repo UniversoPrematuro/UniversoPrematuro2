@@ -11,13 +11,15 @@ import '../models/perfil_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
-class ProfState extends State<EditProfile>{
+class ProfState extends State<EditProfile> with RegisterValidator{
 
   final TextEditingController controllerNome = TextEditingController();
   final TextEditingController controllerNomeMae = TextEditingController();
   final TextEditingController controllerBirth = TextEditingController();
   final TextEditingController controllerGage = TextEditingController();
   final TextEditingController controllerGender = TextEditingController();
+  String erro = "";
+
 
   var maskDate = MaskTextInputFormatter(
       mask: '##/##/####',
@@ -160,6 +162,8 @@ class ProfState extends State<EditProfile>{
     String birth = controllerBirth.text;
     String gender = controllerGender.text;
     String gage = controllerGage.text;
+
+    
 
     Map<String, dynamic> data = {
       "nome": nome,

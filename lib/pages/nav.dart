@@ -49,9 +49,10 @@ class _NavState extends State<Nav> {
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.arrow_upward),
-                  label: "Crescimento"
+                  label: "Crescimento",
                   
                 ),
+                
               ],
               onTap: onTapped,
             ),

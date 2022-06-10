@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:universoprematurov8/pages/profile.dart';
 import 'package:universoprematurov8/repositories/prof_rep.dart';
-
+import 'dart:async';
 class EditProfile extends StatefulWidget {
   const EditProfile({Key? key}) : super(key: key);
 
@@ -16,8 +16,98 @@ class EditProfile extends StatefulWidget {
   State<EditProfile> createState() => _EditProfileState();
 }
 
-class _EditProfileState extends State<EditProfile> with ProfileState{
 
+
+
+class RegisterValidator{
+
+  final validateName = StreamTransformer<String,String>.fromHandlers(
+      handleData: (name,sink){
+        if(name.length >= 5){
+          sink.add(name);
+        } else {
+          sink.addError('Digite um nome válido');
+        }
+      }
+  );
+  final validateBirth = StreamTransformer<String,String>.fromHandlers(
+      handleData: (birth,sink){
+        if(birth.length == 10){
+          int d = int.parse(birth.substring(0,2));
+          int m = int.parse(birth.substring(3,5));
+          int y = int.parse(birth.substring(6,10));
+          if(d >= 1 && d <= 31 && m >= 1 && m <=12 && y >= 2019){
+            sink.add(birth);
+          }else {
+            sink.addError('Digite uma data válida');
+          }
+        } else {
+          sink.addError('Digite a data completa');
+        }
+      }
+  );
+  final validateMother = StreamTransformer<String,String>.fromHandlers(
+      handleData: (mother,sink){
+        if(mother.length >= 5){
+          sink.add(mother);
+        } else {
+          sink.addError('Digite um nome válido');
+        }
+      }
+  );
+  final validateGage = StreamTransformer<String,String>.fromHandlers(
+      handleData: (gage,sink){
+        if(gage.length == 21){
+          int s = int.parse(gage.substring(9,11));
+          int d = int.parse(gage.substring(20,21));
+          if(s >= 22 && s <= 37 && d <= 6){
+            sink.add(gage);
+          }else {
+            sink.addError('Digite valores válidos');
+          }
+        } else {
+          sink.addError('Digite as semanas e os dias');
+        }
+      }
+  );
+  // final validateGender = StreamTransformer<String,String>.fromHandlers(
+  //     handleData: (gender,sink){
+  //       if(gender == 'Masculino' || gender == 'Feminino'){
+  //         sink.add(gender);
+  //       } else {
+  //         sink.addError('Selecione uma opção');
+  //       }
+  //     }
+  // );
+
+  // final validateCell =  StreamTransformer<String,String>.fromHandlers(
+  //   handleData: (cell, sink) {
+  //     if(cell.length > 8 && cell.length < 15){
+  //       sink.add(cell);
+  //     } else {
+  //       sink.addError('Digite o número corretamente');
+  //     }
+  //   }
+  // );
+
+  // final validateCellButton = StreamTransformer<String,bool>.fromHandlers(
+  //   handleData: (cell,sink) {
+  //     if(cell.length > 8 && cell.length < 15){
+  //       sink.add(true);
+  //     } else {
+  //       sink.add(false);
+  //     }
+  //   }
+  // );
+
+}
+class _EditProfileState extends State<EditProfile> with ProfileState, RegisterValidator{
+
+  
+  
+  
+  
+  
   FirebaseStorage storage = FirebaseStorage.instance;
   XFile? imagem;
   String? idUsuarioLogado;
@@ -95,7 +185,7 @@ class _EditProfileState extends State<EditProfile> with ProfileState{
         appBar: AppBar(
           title: const Text("Editar Perfil"),
           centerTitle: true,
-          backgroundColor: const Color.fromARGB(255, 255, 193, 143),
+          backgroundColor:  Colors.green,
           elevation: 0,
           actions: [
             Image.asset('images/logo/LogoTop.png', width: 45, height: 20)
@@ -242,8 +332,9 @@ class _EditProfileState extends State<EditProfile> with ProfileState{
                   child: ElevatedButton(
                     onPressed: () {
                       instance.saveData();
+                      instance.recuperarDadosUsuario();
                       // instance.atualizarUrlImagemFirestore(urlImagemRecuperada);
-                      Navigator.pushReplacementNamed(context, '/nav');
+                       Navigator.pushReplacementNamed(context, '/profile');
                       // Navigator.push(context, MaterialPageRoute(builder: (context) => const Profile()));
                     },
                     
@@ -261,10 +352,20 @@ class _EditProfileState extends State<EditProfile> with ProfileState{
                           fontWeight: FontWeight.w500),
                     ),
                   )),
-            ]
-          )
+                  Center(
+                            child: Text(
+                              instance.erro, 
+                              style: const 
+                              TextStyle(
+                                color: Color.fromARGB(255, 255, 0, 0)
+                              ),
+                            ),
+                          )
+            ],
+
+          ),
         )
-      )
+      ),
     ));
   }
 }
